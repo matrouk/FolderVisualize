@@ -1,0 +1,16 @@
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\bin\Debug\net6.0-windows\FolderVisualize.exe
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\bin\Debug\net6.0-windows\FolderVisualize.deps.json
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\bin\Debug\net6.0-windows\FolderVisualize.runtimeconfig.json
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\bin\Debug\net6.0-windows\FolderVisualize.dll
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\bin\Debug\net6.0-windows\FolderVisualize.pdb
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.Form1.resources
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.csproj.GenerateResource.cache
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.AssemblyInfoInputs.cache
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.AssemblyInfo.cs
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.csproj.CoreCompileInputs.cache
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.dll
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\refint\FolderVisualize.dll
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.pdb
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\FolderVisualize.genruntimeconfig.cache
+C:\Users\Matrouk\source\repos\FolderVisualize\FolderVisualize\obj\Debug\net6.0-windows\ref\FolderVisualize.dll

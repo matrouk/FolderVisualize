@@ -11,6 +11,8 @@ namespace FolderVisualize
         private Font drawingFont = new Font("Arial", 12);
         private Brush drawingBrush = Brushes.Black;
         private int startingYPosition = 20;
+        private float _zoomScale = 1.0f;
+        private bool _ctrlKeyPressed = false;
 
         public Form1()
         {
@@ -23,6 +25,17 @@ namespace FolderVisualize
             this.AutoScroll = true;
             panel1.Paint += new PaintEventHandler(panel1_Paint);
             panel1.Scroll += new ScrollEventHandler(panel1_Scroll);
+            this.MouseWheel += OnMouseWheel;
+            this.KeyDown += OnKeyDown;
+            this.KeyUp += OnKeyUp;
+            this.KeyPreview = true; // This ensures that the form receives key events first
+
+            // Focus the panel on form load
+            this.Load += (s, e) => { panel1.Focus(); };
+
+            // Attach mouse wheel event handler to panel1
+            panel1.MouseWheel += OnMouseWheel;
+
             Component.startingYPosition = 20;
         }
 
@@ -71,27 +84,26 @@ namespace FolderVisualize
 
             Graphics g = e.Graphics;
 
-            // Apply a translation only once to account for the scrolling.
-            g.TranslateTransform(panel1.AutoScrollPosition.X, panel1.AutoScrollPosition.Y);
+            // Apply the zoom scale to the graphics object
+            g.ScaleTransform(_zoomScale, _zoomScale);
 
-            // Start with a clean background. No need to call Clear twice.
+            // Apply a translation to account for the scrolling, scaled by the current zoom level
+            g.TranslateTransform(panel1.AutoScrollPosition.X / _zoomScale, panel1.AutoScrollPosition.Y / _zoomScale);
+
             g.Clear(panel1.BackColor);
 
-            // Calculate the starting y-coordinate, considering the scroll position.
-            int y = startingYPosition - panel1.AutoScrollPosition.Y;
+            // Adjust the starting position based on the zoom scale
+            int y = (int)((startingYPosition - panel1.AutoScrollPosition.Y) / _zoomScale);
 
-            // Draw the folder structure starting from the adjusted y-coordinate.
             topFolder.Visualize(g, 0, 20, ref y, drawingFont, drawingBrush);
 
-            // After drawing, calculate the total size needed for the content.
-            int totalHeight = CalculateTotalHeight(topFolder, 0, g) + panel1.AutoScrollPosition.Y;
-            int totalWidth = CalculateTotalWidth(topFolder, 0, g) + panel1.AutoScrollPosition.X;
+            // Use the zoom scale to adjust the total size needed for the content
+            int totalHeight = (int)(CalculateTotalHeight(topFolder, 0, g) / _zoomScale) + panel1.AutoScrollPosition.Y;
+            int totalWidth = (int)(CalculateTotalWidth(topFolder, 0, g) / _zoomScale) + panel1.AutoScrollPosition.X;
 
-            // Ensure the minimum scrollable size is always larger than the panel size
             totalHeight = Math.Max(totalHeight, panel1.Height + 1);
             totalWidth = Math.Max(totalWidth, panel1.Width + 1);
 
-            // Set the AutoScrollMinSize based on the total size required for the visualized content.
             panel1.AutoScrollMinSize = new Size(totalWidth, totalHeight);
         }
 
@@ -180,6 +192,50 @@ namespace FolderVisualize
                     // Invalidate the panel to redraw
                     panel1.Invalidate(); // This will trigger the panel1_Paint event
                 }
+            }
+        }
+
+        private void OnMouseWheel(object sender, MouseEventArgs e)
+        {
+            // Check if Control key is pressed
+            if (_ctrlKeyPressed)
+            {
+                // Adjust the zoom scale by 0.1f per wheel delta
+                _zoomScale += e.Delta * 0.001f; // Change this value to zoom more or less per wheel notch
+                _zoomScale = Math.Max(0.1f, _zoomScale); // Prevent zooming out too much
+
+                panel1.Refresh();
+
+                // Redraw the component with the new zoom scale
+                panel1.Refresh(); // Triggers the Paint event where you redraw everything
+            }
+        }
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.ControlKey)
+            {
+                _ctrlKeyPressed = true;
+            }
+            else if (_ctrlKeyPressed && (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add))
+            {
+                _zoomScale += 0.1f;
+                panel1.Refresh(); // Force immediate repaint of the panel
+            }
+            else if (_ctrlKeyPressed && (e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract))
+            {
+                _zoomScale -= 0.1f;
+                _zoomScale = Math.Max(0.1f, _zoomScale);
+                panel1.Refresh(); // Force immediate repaint of the panel
+            }
+        }
+
+
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            // Reset the Control key state when it is released
+            if (e.KeyCode == Keys.ControlKey)
+            {
+                _ctrlKeyPressed = false;
             }
         }
 

@@ -14,7 +14,8 @@ namespace FolderVisualize
         public static int PanelWidth { get; set; }
         public static VisualizationMode Mode { get; set; } = VisualizationMode.Horizontal; // Default to horizontal mode.
         public static int startingYPosition { get; set; }
-
+     
+         public static int PanelHeight { get; set; }
 
         public string Name { get; protected set; }
 

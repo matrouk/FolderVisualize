@@ -54,6 +54,7 @@ namespace FolderVisualize
                 // Update y to the bottom of the folder
                 y += boxSize.Height + verticalPadding;
 
+                //if there is more children
                 if (children.Count > 0)
                 {
                     int verticalLineStartY = boxLocation.Y + boxSize.Height;
@@ -81,86 +82,85 @@ namespace FolderVisualize
                     g.DrawLine(Pens.Black, verticalLineX, verticalLineStartY, verticalLineX, verticalLineEndY);
                 }
             }
-            else {
+            else
+            {
                 SizeF textSize = g.MeasureString(Name, font);
                 const int horizontalPadding = 30;
                 const int verticalPadding = 8;
-                const int verticalSpacing = 50; // Increased space for top-level folders
-                int siblingOffset = 100; // Horizontal space between sibling folders/files
+                const int verticalSpacing = 50;
+                const int siblingOffset = 100;
 
-                // Calculate box size for the folder
                 Size boxSize = new Size((int)textSize.Width + 2 * horizontalPadding, (int)textSize.Height + 2 * verticalPadding);
 
-                // Center the top folder horizontally by calculating the required offset
+                // Center the top folder 
                 if (depth == 0)
                 {
-                    int totalChildrenWidth = children.Sum(child => (int)g.MeasureString(child.Name, font).Width + 2 * horizontalPadding);
-                    int totalOffset = (children.Count - 1) * siblingOffset;
-                    x = (Component.PanelWidth - (totalChildrenWidth + totalOffset)) / 2;
+                    x = (Component.PanelWidth - boxSize.Width) / 2;
                 }
 
                 Point boxLocation = new Point(x, y);
                 Rectangle boxRectangle = new Rectangle(boxLocation, boxSize);
 
-                // Draw the folder
                 g.FillRectangle(Brushes.White, boxRectangle);
                 g.DrawRectangle(Pens.Black, boxRectangle);
                 g.DrawString(Name, font, brush, boxLocation.X + horizontalPadding, boxLocation.Y + verticalPadding);
 
-                // Update y to the bottom of the folder
-                y += boxSize.Height + verticalPadding;
+                // Determine the y-coordinate for the children
+                int childY = y + boxSize.Height + verticalSpacing;
 
-                // Only proceed if there are children to visualize
                 if (children.Count > 0)
                 {
-                    // Start the first child at the center of the top folder minus half the total width of all children
-                    int childrenStartX = boxLocation.X;
+                    // Calculate total width of all children
+                    int totalChildrenWidth = children.Sum(c => (int)g.MeasureString(c.Name, font).Width + 2 * horizontalPadding + siblingOffset) - siblingOffset;
 
-                    // Iterate over each child to visualize them
+                    // Start children at x-coordinate that will center them beneath the parent
+                    int childrenStartX = x + (boxSize.Width / 2) - (totalChildrenWidth / 2);
+
                     foreach (var child in children)
                     {
                         SizeF childTextSize = g.MeasureString(child.Name, font);
                         Size childBoxSize = new Size((int)childTextSize.Width + 2 * horizontalPadding, (int)childTextSize.Height + 2 * verticalPadding);
 
-                        // Calculate the middle point for the connecting line
-                        int lineStartX = boxLocation.X + boxSize.Width / 2;
-                        int lineEndX = childrenStartX + childBoxSize.Width / 2;
+                        // Center the child node horizontally beneath its parent node
+                        int childX = childrenStartX + (childBoxSize.Width / 2) - (int)(childTextSize.Width / 2);
 
-                        // Draw the line from the current folder to the child folder
-                        g.DrawLine(Pens.Black, lineStartX, boxLocation.Y + boxSize.Height, lineEndX, y + verticalSpacing / 2);
+                        // Draw line from parent to child
+                        g.DrawLine(Pens.Black, boxLocation.X + boxSize.Width / 2, boxLocation.Y + boxSize.Height, childX, childY);
 
-                        // Visualize the child
-                        int childY = y + verticalSpacing;
-                        child.Visualize(g, depth + 1, childrenStartX, ref childY, font, brush);
+                        // Visualize the child node
+                        int nextChildY = childY; // Use a separate variable to hold the modified y-coordinate for the next child
+                        child.Visualize(g, depth + 1, childX, ref nextChildY, font, brush);
 
-                        // Update childrenStartX for the next child
+                        // Increment childrenStartX to place the next child to the right
                         childrenStartX += childBoxSize.Width + siblingOffset;
                     }
 
-                    // After all children are visualized, update y to the bottom of the last child
-                    y += children.Max(c => (int)g.MeasureString(c.Name, font).Height + 2 * verticalPadding) + verticalSpacing;
-
+                    // After all children have been visualized, update y to the bottom of the children
+                    y = childY;
                 }
-            }
-
-            }
-            
-        
-
-
-
-
-
-            private int CalculateVerticalLineEndY(Graphics g, Font font, int startY)
-            {
-                int maxY = startY;
-                foreach (var child in children)
+                else
                 {
-                    SizeF childSize = g.MeasureString(child.Name, font);
-                    int childHeight = (int)childSize.Height + 30; // 30 is the vertical offset between items
-                    maxY += childHeight;
+                    // If there are no children, just update y below this node
+                    y += boxSize.Height + verticalSpacing;
                 }
-                return maxY;
             }
+
+
+
+
         }
-    } 
+
+
+        private int CalculateVerticalLineEndY(Graphics g, Font font, int startY)
+        {
+            int maxY = startY;
+            foreach (var child in children)
+            {
+                SizeF childSize = g.MeasureString(child.Name, font);
+                int childHeight = (int)childSize.Height + 30; // 30 is the vertical offset between items
+                maxY += childHeight;
+            }
+            return maxY;
+        }
+    }
+}

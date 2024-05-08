@@ -35,10 +35,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(1297, 469);
-            button1.Margin = new Padding(3, 2, 3, 2);
+            button1.Location = new Point(1482, 625);
             button1.Name = "button1";
-            button1.Size = new Size(82, 22);
+            button1.Size = new Size(94, 29);
             button1.TabIndex = 0;
             button1.Text = "Horizontal";
             button1.UseVisualStyleBackColor = true;
@@ -46,18 +45,18 @@
             // 
             // panel1
             // 
-            panel1.Location = new Point(29, 57);
-            panel1.Margin = new Padding(3, 2, 3, 2);
+            panel1.Location = new Point(33, 76);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1219, 535);
+            panel1.Size = new Size(1393, 713);
             panel1.TabIndex = 1;
             panel1.Paint += panel1_Paint;
             // 
             // button2
             // 
-            button2.Location = new Point(1297, 515);
+            button2.Location = new Point(1482, 687);
+            button2.Margin = new Padding(3, 4, 3, 4);
             button2.Name = "button2";
-            button2.Size = new Size(82, 23);
+            button2.Size = new Size(94, 31);
             button2.TabIndex = 2;
             button2.Text = "Vertical";
             button2.UseVisualStyleBackColor = true;
@@ -65,13 +64,12 @@
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1457, 658);
+            ClientSize = new Size(1665, 877);
             Controls.Add(button2);
             Controls.Add(panel1);
             Controls.Add(button1);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
